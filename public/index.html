@@ -1,12 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
+    <script>
+
+        if ("geolocation" in navigator) {
+        console.log("Geolocation is available");
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            document.getElementById("latitude").textContent = lat;
+            document.getElementById("longitude").textContent = lon;
+
+            const data = {lat, lon};
+
+            document.getElementById("btn").onclick = async () => {
+                const options = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                }
+
+                const response = await fetch("/api", options);
+                const res = await response.json();
+
+                console.log(res);
+            }
+            
+            });
+        } else {
+        console.log("Geolocation is not available");
+        }
+
+        
+
+
+    </script>
     <h1>Hello here!</h1>
-</body>
+
+    <br>
+      Latitude: <span id="latitude"></span>&deg; </br>
+      Longitude: <span id="longitude"></span>&deg;
+    </p>
+    </br>
+
+    <button id="btn">Submit</button>
+  </body>
 </html>
